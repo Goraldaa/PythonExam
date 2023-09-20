@@ -1,11 +1,23 @@
 def title_data():
-    name = input('Введите заголовок заметки: ')
+    flag = True
+    while flag:
+        title = input('Введите заголовок заметки. Не используйте символ ";": ')
+        flag = False
+        if ';' in title:
+            print("Не используйте в названии символ ';'")
+            flag = True
     print("Данные успешно сохранены")
-    return name
+    return title
 
 
 def note_data():
-    surname = input('Введите содержание заметки: ')
+    flag = True
+    while flag:
+        note = input('Введите тело заметки. Не используйте символ ";": ')
+        flag = False
+        if ';' in note:
+            print("Не используйте в тексте символ ';'")
+            flag = True
     print("Данные успешно сохранены")
-    return surname
+    return note
 

@@ -11,24 +11,32 @@ def interface():
               '5. Найти заметку по номеру\n'
               '6. Фильтр по дате\n'
               '7. Выход')
-        command = int(input("Введите номер операции: "))
-
-        while command < 1 or command > 7:
-            print('Ты дурак?! Даю тебе последний шанс')
+        try:
             command = int(input("Введите номер операции: "))
+        except ValueError as e:
+            print('Введены неверные данные')
+        else:
+            
+            while command < 1 or command > 7:
+                print('Введите число от 1 до 7')
+                try:
+                    command = int(input("Введите номер операции: "))
+                except ValueError as e:
+                    print('Введены неверные данные')
+                    
 
-        if command == 1:
-            input_data()
-        elif command == 2:
-            delete_data()
-        elif command == 3:
-            changes_data()
-        elif command == 4:
-            print_data()
-        elif command == 5:
-            print_ID()
-        elif command == 6:
-            print_filter_date()
-        elif command == 7:
-             print("Спасибо, что воспользовались нашими услугами. Всего доброго!")
-       
+            if command == 1:
+                input_data()
+            elif command == 2:
+                delete_data()
+            elif command == 3:
+                changes_data()
+            elif command == 4:
+                print_data()
+            elif command == 5:
+                print_ID()
+            elif command == 6:
+                print_filter_date()
+            elif command == 7:
+                print("Спасибо, что воспользовались нашими услугами. Всего доброго!")
+        
