@@ -11,7 +11,6 @@ def input_data():
     with open('data.csv', 'a', encoding='utf-8') as file:
         file.write(f'{count};{title};{note};{datetime.datetime.today().strftime("%Y-%m-%d %H.%M.%S")}\n')
 
-
 def print_data():
     with open('data.csv', 'r', encoding='utf-8') as file:
         data = list(file.readlines())
@@ -23,9 +22,7 @@ def print_data():
               f'{title[2]}: {tempData[2]}\n'
               f'{title[3][:-1]}: {tempData[3]}\n')
     
-
 def change_line(dataFile, numberRow):
-    
     countID = dataFile[numberRow].split(';')[0] 
     title = dataFile[numberRow].split(';')[1]
     note = dataFile[numberRow].split(';')[2]
@@ -59,130 +56,154 @@ def change_line(dataFile, numberRow):
         file.write(''.join(data))
     print('Изменения успешно сохранены!')
 
-
 def changes_data():
-    
-    with open('data.csv', 'r', encoding='utf-8') as file:
-        data = list(file.readlines())
-    try:
-        number_journal = int(input(f'Введите номер записи, которую хотите изменить (число от 1 до {len(data)-1}): '))
-    except ValueError as e:
-        print('Введены неверные данные')
-    else:
-        while number_journal >= len(data) or number_journal < 1:
-            print(f'Введите число от 1 до {len(data)-1}')
-            try:
-                number_journal = int(input("Введите номер записи, которую хотите изменить:"))
-            except ValueError as e:
-                print('Введены неверные данные')
-            
-        change_line(data, number_journal)
-
+    flag = True
+    while flag:
+        with open('data.csv', 'r', encoding='utf-8') as file:
+            data = list(file.readlines())
+        try:
+            number_journal = int(input(f'Введите номер записи, которую хотите изменить (число от 1 до {len(data)-1}): '))
+        except ValueError as e:
+            print('Введены неверные данные')
+        else:
+            while number_journal >= len(data) or number_journal < 1:
+                print(f'Введите число от 1 до {len(data)-1}')
+                try:
+                    number_journal = int(input("Введите номер записи, которую хотите изменить:"))
+                except ValueError as e:
+                    print('Введены неверные данные')
+                
+            change_line(data, number_journal)
+            flag = False
 
 def delete_data():
-    with open('data.csv', 'r', encoding='utf-8') as file:
-        data = list(file.readlines())
-    try:
-        number_journal = int(input(f'Введите номер записи, которую хотите удалить (число от 1 до {len(data)-1}): '))
-    except ValueError as e:
-        print('Введены неверные данные')
-    else:
-        while  len(data) <= number_journal  or number_journal < 1 :
+    flag = True
+    while flag:
+        with open('data.csv', 'r', encoding='utf-8') as file:
+            data = list(file.readlines())
+        try:
+            number_journal = int(input(f'Введите номер записи, которую хотите удалить (число от 1 до {len(data)-1}): '))
+        except ValueError as e:
             print('Введены неверные данные')
-            try:
-                number_journal = int(input(f"Введите номер записи, которую хотите удалить (число от 1 до {len(data)-1}):"))
-            except ValueError as e:
-                print('Введены неверные данные')
-        countID = data[number_journal].split(';')[0] 
-        title = data[number_journal].split(';')[1]
-        note = data[number_journal].split(';')[2]
-        date = data[number_journal].split(';')[3]
-        titleCSV = data[0].split(';')   
-        answer = input(f'{titleCSV[0]}: {countID}\n'
-                       f'{titleCSV[1]}: {title}\n'
-                       f'{titleCSV[2]}: {note}\n'
-                       f'{titleCSV[3][:-1]}: {date}\n'
-                       'Удалить данную запись (да / нет)?:')
-        
-        while answer != 'да' and answer!='нет':
-            answer = input("Введены неверные значения, напишите 'да' или 'нет': ")
-        if answer == "да":
-            if number_journal == len(data)-1:  
-                data = data[:number_journal+1]
-            else:
-                data = data[:number_journal] + data[number_journal + 1:]
-            while number_journal<len(data):
-                title = data[number_journal].split(';')[1]
-                note = data[number_journal].split(';')[2]
-                time = data[number_journal].split(';')[3]
-                if number_journal == len(data)-1:
-                    data = data[:number_journal] + [f'{number_journal};{title};{note};{time}']
+        else:
+            while  len(data) <= number_journal  or number_journal < 1 :
+                print(f'Введите число от 1 до {len(data)-1}): ')
+                try:
+                    number_journal = int(input(f"Введите номер записи, которую хотите удалить (число от 1 до {len(data)-1}):"))
+                except ValueError as e:
+                    print('Введены неверные данные')
+            countID = data[number_journal].split(';')[0] 
+            title = data[number_journal].split(';')[1]
+            note = data[number_journal].split(';')[2]
+            date = data[number_journal].split(';')[3]
+            titleCSV = data[0].split(';')   
+            answer = input(f'{titleCSV[0]}: {countID}\n'
+                        f'{titleCSV[1]}: {title}\n'
+                        f'{titleCSV[2]}: {note}\n'
+                        f'{titleCSV[3][:-1]}: {date}\n'
+                        'Удалить данную запись (да / нет)?:')
+            
+            while answer != 'да' and answer!='нет':
+                answer = input("Введены неверные значения, напишите 'да' или 'нет': ")
+            if answer == "да":
+                if number_journal == len(data)-1:  
+                    data = data[:number_journal+1]
                 else:
-                    data = data[:number_journal] + [f'{number_journal};{title};{note};{time}'] + \
-                        data[number_journal + 1:]
-                number_journal+=1
-            with open('data.csv', 'w', encoding='utf-8') as file:
-                file.write(''.join(data))
-            print('Запись успешно удалена.\n')
-        
-
+                    data = data[:number_journal] + data[number_journal + 1:]
+                while number_journal<len(data):
+                    title = data[number_journal].split(';')[1]
+                    note = data[number_journal].split(';')[2]
+                    time = data[number_journal].split(';')[3]
+                    if number_journal == len(data)-1:
+                        data = data[:number_journal] + [f'{number_journal};{title};{note};{time}']
+                    else:
+                        data = data[:number_journal] + [f'{number_journal};{title};{note};{time}'] + \
+                            data[number_journal + 1:]
+                    number_journal+=1
+                with open('data.csv', 'w', encoding='utf-8') as file:
+                    file.write(''.join(data))
+                print('Запись успешно удалена.\n')
+                flag = False
 
 def print_ID():
-    with open('data.csv', 'r', encoding='utf-8') as file:
-        data = list(file.readlines())
-    try:
-        number_journal = int(input(f'Введите номер записи, которую вывести (число от 1 до {len(data)-1}): '))
-    except ValueError as e:
-        print('Введены неверные данные')
-    else:
-        while number_journal >= len(data) or number_journal < 1:
+    flag = True
+    while flag:    
+        with open('data.csv', 'r', encoding='utf-8') as file:
+            data = list(file.readlines())
+        try:
+            number_journal = int(input(f'Введите номер записи, которую вывести (число от 1 до {len(data)-1}): '))
+        except ValueError as e:
             print('Введены неверные данные')
-            try:
-                number_journal = int(input(f"Введите номер записи, которую вывести (число от 1 до {len(data)-1}):"))
-            except ValueError as e:
-                print('Введены неверные данные')
-        countID = data[number_journal].split(';')[0] 
-        title = data[number_journal].split(';')[1]
-        note = data[number_journal].split(';')[2]
-        date = data[number_journal].split(';')[3]
-        titleCSV = data[0].split(';')   
-        print(f'{titleCSV[0]}: {countID}\n'
-            f'{titleCSV[1]}: {title}\n'
-            f'{titleCSV[2]}: {note}\n'
-            f'{titleCSV[3][:-1]}: {date}\n')   
-        
+        else:
+            while number_journal >= len(data) or number_journal < 1:
+                print(f'Введите число от 1 до {len(data)-1}')
+                try:
+                    number_journal = int(input(f"Введите номер записи, которую вывести (число от 1 до {len(data)-1}):"))
+                except ValueError as e:
+                    print('Введены неверные данные')
+            countID = data[number_journal].split(';')[0] 
+            title = data[number_journal].split(';')[1]
+            note = data[number_journal].split(';')[2]
+            date = data[number_journal].split(';')[3]
+            titleCSV = data[0].split(';')   
+            print(f'{titleCSV[0]}: {countID}\n'
+                f'{titleCSV[1]}: {title}\n'
+                f'{titleCSV[2]}: {note}\n'
+                f'{titleCSV[3][:-1]}: {date}\n')   
+            flag = False
+
 def print_filter_date():
-    with open('data.csv', 'r', encoding='utf-8') as file:
-        data = list(file.readlines())
-    try:
-        year = int(input('Выведите год:'))
-        month = int(input('Введите месяц:'))
-        day = int(input('Введите день:'))
-        filter_date = datetime.datetime(year, month, day)
-    except ValueError as e:
-        print('Введены неверные данные')
-    else:
-    
-        command = int(input('Какие записи вы хотите увидеть?\n'
-                f'1. Найти записи от {year}-{month}-{day}.\n'
-                f'2. Найти записи сделанные ранее {year}-{month}-{day}.\n'
-                f'3. Найти записи сделанные позже {year}-{month}-{day}.\n'
-                'Введите номер команды: '))
+    flag = True
+    while flag: 
+        with open('data.csv', 'r', encoding='utf-8') as file:
+            data = list(file.readlines())
+        try:
+            year = int(input('Выведите год:'))
+            month = int(input('Введите месяц:'))
+            day = int(input('Введите день:'))
+            filter_date = datetime.datetime(year, month, day)
+        except ValueError as e:
+            print('Введены неверные данные')
+        else:
         
-        for i in range(1, len(data)):
-            data_time = data[i].split(';')[3]
-            data_date = data_time.split(" ")[0]
-            data_date_split = data_date.split('-')
-            note_date = datetime.datetime(int(data_date_split[0]), int(data_date_split[1]), int(data_date_split[2]))
-            if command == 1:
-                if note_date == filter_date:
-                    print(data[i])
-            elif command == 2:
-                if note_date < filter_date:
-                    print(data[i])
-            elif command == 3:
-                if note_date > filter_date:
-                    print(data[i])
+            command = input('Какие записи вы хотите увидеть?\n'
+                    f'1. Найти записи от {year}-{month}-{day}.\n'
+                    f'2. Найти записи сделанные ранее {year}-{month}-{day}.\n'
+                    f'3. Найти записи сделанные позже {year}-{month}-{day}.\n'
+                    'Введите номер команды: ')
+            while command != "1" and command != "2" and command != "3":
+                command = input('Введите 1,2 или 3: ')
+            for i in range(1, len(data)):
+                data_time = data[i].split(';')[3]
+                data_date = data_time.split(" ")[0]
+                data_date_split = data_date.split('-')
+                note_date = datetime.datetime(int(data_date_split[0]), int(data_date_split[1]), int(data_date_split[2]))
+                countID = data[i].split(';')[0] 
+                title = data[i].split(';')[1]
+                note = data[i].split(';')[2]
+                date = data[i].split(';')[3]
+                titleCSV = data[0].split(';')    
+                if command == '1':
+                    if note_date == filter_date:
+                        print(f'{titleCSV[0]}: {countID}\n'
+                            f'{titleCSV[1]}: {title}\n'
+                            f'{titleCSV[2]}: {note}\n'
+                            f'{titleCSV[3][:-1]}: {date}\n')  
+                elif command == '2':
+                    if note_date < filter_date:
+                        print(f'{titleCSV[0]}: {countID}\n'
+                            f'{titleCSV[1]}: {title}\n'
+                            f'{titleCSV[2]}: {note}\n'
+                            f'{titleCSV[3][:-1]}: {date}\n')  
+                elif command == '3':
+                    if note_date > filter_date:
+                        print(f'{titleCSV[0]}: {countID}\n'
+                            f'{titleCSV[1]}: {title}\n'
+                            f'{titleCSV[2]}: {note}\n'
+                            f'{titleCSV[3][:-1]}: {date}\n')  
+                flag = False
+
+                
 
         
 
