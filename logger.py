@@ -98,11 +98,11 @@ def delete_data():
         note = data[number_journal].split(';')[2]
         date = data[number_journal].split(';')[3]
         titleCSV = data[0].split(';')   
-        answer = input('Удалить данную запись (да или нет)?:\n'
-                  f'{titleCSV[0]}: {countID}\n'
-                  f'{titleCSV[1]}: {title}\n'
-                  f'{titleCSV[2]}: {note}\n'
-                  f'{titleCSV[3][:-1]}: {date}\n')
+        answer = input(f'{titleCSV[0]}: {countID}\n'
+                       f'{titleCSV[1]}: {title}\n'
+                       f'{titleCSV[2]}: {note}\n'
+                       f'{titleCSV[3][:-1]}: {date}\n'
+                       'Удалить данную запись (да / нет)?:')
         
         while answer != 'да' and answer!='нет':
             answer = input("Введены неверные значения, напишите 'да' или 'нет': ")
@@ -141,35 +141,48 @@ def print_ID():
                 number_journal = int(input(f"Введите номер записи, которую вывести (число от 1 до {len(data)-1}):"))
             except ValueError as e:
                 print('Введены неверные данные')
-        print(data[number_journal])
-    
+        countID = data[number_journal].split(';')[0] 
+        title = data[number_journal].split(';')[1]
+        note = data[number_journal].split(';')[2]
+        date = data[number_journal].split(';')[3]
+        titleCSV = data[0].split(';')   
+        print(f'{titleCSV[0]}: {countID}\n'
+            f'{titleCSV[1]}: {title}\n'
+            f'{titleCSV[2]}: {note}\n'
+            f'{titleCSV[3][:-1]}: {date}\n')   
         
 def print_filter_date():
     with open('data.csv', 'r', encoding='utf-8') as file:
         data = list(file.readlines())
-    year = int(input('Выведите год:'))
-    month = int(input('Введите месяц:'))
-    day = int(input('Введите день:'))
-    command = int(input('Какие записи вы хотите увидеть?\n'
-            f'1. Найти записи от {year}-{month}-{day}.\n'
-            f'2. Найти записи сделанные ранее {year}-{month}-{day}.\n'
-            f'3. Найти записи сделанные позже {year}-{month}-{day}.\n'
-            'Введите номер команды: '))
-    filter_date = datetime.datetime(year, month, day)
-    for i in range(1, len(data)):
-        data_time = data[i].split(';')[3]
-        data_date = data_time.split(" ")[0]
-        data_date_split = data_date.split('-')
-        note_date = datetime.datetime(int(data_date_split[0]), int(data_date_split[1]), int(data_date_split[2]))
-        if command == 1:
-            if note_date == filter_date:
-                print(data[i])
-        elif command == 2:
-            if note_date < filter_date:
-                print(data[i])
-        elif command == 3:
-            if note_date > filter_date:
-                print(data[i])
+    try:
+        year = int(input('Выведите год:'))
+        month = int(input('Введите месяц:'))
+        day = int(input('Введите день:'))
+        filter_date = datetime.datetime(year, month, day)
+    except ValueError as e:
+        print('Введены неверные данные')
+    else:
+    
+        command = int(input('Какие записи вы хотите увидеть?\n'
+                f'1. Найти записи от {year}-{month}-{day}.\n'
+                f'2. Найти записи сделанные ранее {year}-{month}-{day}.\n'
+                f'3. Найти записи сделанные позже {year}-{month}-{day}.\n'
+                'Введите номер команды: '))
+        
+        for i in range(1, len(data)):
+            data_time = data[i].split(';')[3]
+            data_date = data_time.split(" ")[0]
+            data_date_split = data_date.split('-')
+            note_date = datetime.datetime(int(data_date_split[0]), int(data_date_split[1]), int(data_date_split[2]))
+            if command == 1:
+                if note_date == filter_date:
+                    print(data[i])
+            elif command == 2:
+                if note_date < filter_date:
+                    print(data[i])
+            elif command == 3:
+                if note_date > filter_date:
+                    print(data[i])
 
         
 
