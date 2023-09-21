@@ -173,6 +173,7 @@ def print_filter_date():
                     'Введите номер команды: ')
             while command != "1" and command != "2" and command != "3":
                 command = input('Введите 1,2 или 3: ')
+            countNote = 0
             for i in range(1, len(data)):
                 data_time = data[i].split(';')[3]
                 data_date = data_time.split(" ")[0]
@@ -188,20 +189,25 @@ def print_filter_date():
                         print(f'{titleCSV[0]}: {countID}\n'
                             f'{titleCSV[1]}: {title}\n'
                             f'{titleCSV[2]}: {note}\n'
-                            f'{titleCSV[3][:-1]}: {date}\n')  
+                            f'{titleCSV[3][:-1]}: {date}\n')
+                        countNote +=1  
                 elif command == '2':
                     if note_date < filter_date:
                         print(f'{titleCSV[0]}: {countID}\n'
                             f'{titleCSV[1]}: {title}\n'
                             f'{titleCSV[2]}: {note}\n'
-                            f'{titleCSV[3][:-1]}: {date}\n')  
+                            f'{titleCSV[3][:-1]}: {date}\n')
+                        countNote +=1  
+  
                 elif command == '3':
                     if note_date > filter_date:
                         print(f'{titleCSV[0]}: {countID}\n'
                             f'{titleCSV[1]}: {title}\n'
                             f'{titleCSV[2]}: {note}\n'
-                            f'{titleCSV[3][:-1]}: {date}\n')  
-                flag = False
+                            f'{titleCSV[3][:-1]}: {date}\n')
+                        countNote +=1  
+            print(f'Найдено записей: {countNote}  из {len(data)-1}')
+            flag = False
 
                 
 
